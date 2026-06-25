@@ -294,6 +294,7 @@ object Injector {
     private fun provideAutoCompleteProvider(context: Context) =
         AutoCompleteProviderImpl(
             providePreferenceProvider(context),
+            context,
         )
 
     private fun provideColorUtils() = ColorUtils()

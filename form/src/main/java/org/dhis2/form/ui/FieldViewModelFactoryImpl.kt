@@ -8,6 +8,7 @@ import org.dhis2.form.model.FieldUiModelImpl
 import org.dhis2.form.model.OptionSetConfiguration
 import org.dhis2.form.model.PeriodSelector
 import org.dhis2.form.model.SectionUiModelImpl
+import org.dhis2.form.model.UiRenderType
 import org.dhis2.form.ui.event.UiEventFactoryImpl
 import org.dhis2.form.ui.provider.AutoCompleteProvider
 import org.dhis2.form.ui.provider.DisplayNameProvider
@@ -23,6 +24,7 @@ import org.hisp.dhis.android.core.common.ValueType
 import org.hisp.dhis.android.core.common.ValueTypeDeviceRendering
 import org.hisp.dhis.android.core.program.SectionRenderingType
 import org.hisp.dhis.mobile.ui.designsystem.component.SelectableDates
+import timber.log.Timber
 
 class FieldViewModelFactoryImpl(
     private val hintProvider: HintProvider,
@@ -59,7 +61,8 @@ class FieldViewModelFactoryImpl(
         customIntentModel: CustomIntentModel?,
     ): FieldUiModel {
         isNull(valueType, "type must be supplied")
-        return FieldUiModelImpl(
+        val fieldUiModel =
+            FieldUiModelImpl(
             uid = id,
             value = value,
             focused = false,
@@ -107,6 +110,13 @@ class FieldViewModelFactoryImpl(
             periodSelector = periodSelector,
             customIntent = customIntentModel,
         )
+
+        return if (id in VILLAGE_ATTRIBUTE_UIDS) {
+            Timber.tag(TAG).d("Forced AUTOCOMPLETE renderType for village TEA: %s", id)
+            fieldUiModel.copy(renderingType = UiRenderType.AUTOCOMPLETE)
+        } else {
+            fieldUiModel
+        }
     }
 
     override fun createSingleSection(singleSectionName: String): FieldUiModel =
@@ -209,4 +219,14 @@ class FieldViewModelFactoryImpl(
             SectionRenderingType.LISTING.name,
             currentSection,
         )
+
+    companion object {
+        private const val TAG = "FieldViewModelFactory"
+        private val VILLAGE_ATTRIBUTE_UIDS =
+            setOf(
+                "oTI0DLitzFY",
+                "YoteNDkoIwM",
+                "pixScollYA6",
+            )
+    }
 }

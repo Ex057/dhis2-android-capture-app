@@ -30,7 +30,6 @@ import org.dhis2.form.model.EnrollmentMode
 import org.dhis2.form.model.RowAction
 import org.dhis2.form.ui.FieldViewModelFactory
 import org.dhis2.form.ui.FieldViewModelFactoryImpl
-import org.dhis2.form.ui.provider.AutoCompleteProviderImpl
 import org.dhis2.form.ui.provider.DisplayNameProviderImpl
 import org.dhis2.form.ui.provider.EnrollmentFormLabelsProvider
 import org.dhis2.form.ui.provider.HintProviderImpl
@@ -130,7 +129,7 @@ class EnrollmentModule(
             UiEventTypesProviderImpl(),
             KeyboardActionProviderImpl(),
             LegendValueProviderImpl(d2, resourceManager),
-            AutoCompleteProviderImpl(preferenceProvider),
+            VillageAutoCompleteProvider(context, preferenceProvider),
         )
 
     @Provides

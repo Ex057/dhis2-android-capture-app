@@ -12,8 +12,10 @@ import org.dhis2.form.data.metadata.EnrollmentConfiguration
 import org.dhis2.form.model.EnrollmentMode
 import org.dhis2.form.model.EventMode
 import org.dhis2.form.model.FieldUiModel
+import org.dhis2.form.model.FieldUiModelImpl
 import org.dhis2.form.model.OptionSetConfiguration
 import org.dhis2.form.model.SectionUiModelImpl.Companion.SINGLE_SECTION_UID
+import org.dhis2.form.model.UiRenderType
 import org.dhis2.form.ui.FieldViewModelFactory
 import org.dhis2.form.ui.provider.EnrollmentFormLabelsProvider
 import org.dhis2.form.ui.provider.inputfield.DEFAULT_MAX_DATE
@@ -269,6 +271,11 @@ class EnrollmentRepository(
                 if (valueType == ValueType.COORDINATE) FeatureType.POINT else null,
                 customIntentModel = attributeCustomIntent,
             )
+
+        if (attribute.uid() in VILLAGE_ATTRIBUTE_UIDS && fieldViewModel is FieldUiModelImpl) {
+            fieldViewModel = fieldViewModel.copy(renderingType = UiRenderType.AUTOCOMPLETE)
+            Timber.d("Forced AUTOCOMPLETE renderType for village TEA: %s", attribute.uid())
+        }
 
         if (!error.isNullOrEmpty()) {
             fieldViewModel = fieldViewModel.setError(error)
@@ -591,6 +598,12 @@ class EnrollmentRepository(
     }
 
     companion object {
+        private val VILLAGE_ATTRIBUTE_UIDS =
+            setOf(
+                "oTI0DLitzFY",
+                "YoteNDkoIwM",
+                "pixScollYA6",
+            )
         const val ENROLLMENT_DATA_SECTION_UID = "ENROLLMENT_DATA_SECTION_UID"
         const val ENROLLMENT_DATE_UID = "ENROLLMENT_DATE_UID"
         const val INCIDENT_DATE_UID = "INCIDENT_DATE_UID"

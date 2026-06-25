@@ -94,7 +94,7 @@ class EventDetailsModule(
                     UiEventTypesProviderImpl(),
                     KeyboardActionProviderImpl(),
                     LegendValueProviderImpl(d2, resourceManager),
-                    AutoCompleteProviderImpl(preferenceProvider),
+                    AutoCompleteProviderImpl(preferenceProvider, context),
                 ),
             onError = resourceManager::parseD2Error,
         )

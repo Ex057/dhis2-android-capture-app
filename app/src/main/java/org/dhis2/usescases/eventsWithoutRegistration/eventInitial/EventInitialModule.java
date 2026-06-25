@@ -97,7 +97,7 @@ public class EventInitialModule {
                 new UiEventTypesProviderImpl(),
                 new KeyboardActionProviderImpl(),
                 new LegendValueProviderImpl(d2, resourceManager),
-                new AutoCompleteProviderImpl(preferenceProvider)
+                new AutoCompleteProviderImpl(preferenceProvider, context)
         );
     }
 
